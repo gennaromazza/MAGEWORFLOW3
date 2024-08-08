@@ -1,4 +1,4 @@
-name: C++ Build
+name: Build and Package MageWorkflow
 
 on:
   push:
@@ -11,20 +11,36 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Set up Qt
       uses: jurplel/install-qt-action@v2
       with:
         version: 5.15.2
         host: windows_msvc2019_64
+
     - name: Install dependencies
       run: |
         choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
         choco install opencv
         choco install log4cpp
+        choco install innosetup
+
     - name: Configure CMake
       run: cmake -B build -S .
+
     - name: Build
       run: cmake --build build --config Release
+
     - name: Run tests
       run: ctest --output-on-failure
+
+    - name: Package with Inno Setup
+      run: iscc setup.iss
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: MageWorkflowInstaller
+        path: MageWorkflowSetup.exe
