@@ -1,5 +1,6 @@
-name: Build and Package MageWorkflow
-
+cd "C:\Users\Gennaro\Desktop\MAGE SOFTWARE\MAGEWORFLOW3"
+mkdir -p .github/workflows
+echo "name: Build and Package MageWorkflow
 on:
   push:
     branches: [ main ]
@@ -44,3 +45,7 @@ jobs:
       with:
         name: MageWorkflowInstaller
         path: MageWorkflowSetup.exe
+" > .github/workflows/build.yml
+git add .github/workflows/build.yml
+git commit -m "Add GitHub Actions workflow for building and packaging"
+git push origin main
